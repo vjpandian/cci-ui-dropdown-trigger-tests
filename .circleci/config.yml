@@ -1,0 +1,25 @@
+version: 2.1
+
+parameters:
+  tf-version:
+     type: enum
+     default: "light"
+     enum: ["light", "1.8.4", "1.9.2"]
+
+  environment:
+     type: enum
+     default: "dev"
+     enum: ["staging", "test", "dev"]
+
+jobs:
+  tf-test:
+    docker:
+       - image: hashicorp/terraform:<<pipeline.parameters.tf-version>>
+    steps:
+      - checkout
+      - run: echo "environment targeted is <<pipeline.parameters.environment>>"
+
+workflows:
+  main:
+    jobs:
+      - tf-test
